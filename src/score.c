@@ -20,7 +20,7 @@ Highscore_ptr new_highscore(char *name, int score)
 {
     Highscore_ptr new_highscore;
     new_highscore = malloc(sizeof(Highscore));
-    new_highscore->name = malloc(sizeof(char) * 6);
+    new_highscore->name = malloc(sizeof(char) * NAME_LENGTH + 1);
     strcpy(new_highscore->name, name);
     new_highscore->score = score;
     return new_highscore;
@@ -29,10 +29,12 @@ Highscore_ptr new_highscore(char *name, int score)
 //free the memory
 void delete_highscore(Highscore_ptr highscore)
 {
+    free(highscore->name);
     free(highscore);
     highscore = NULL;
 }
 
+//return the nb of scores in the file to have the array size
 int get_nb_scores(FILE *f)
 {
     rewind(f);
@@ -43,7 +45,7 @@ int get_nb_scores(FILE *f)
     {
         i++;
     }
-    return i;
+    return i < NB_SCORES ? i : NB_SCORES;
 }
 
 //get the highscores store in the file f
@@ -52,7 +54,7 @@ Highscore_ptr *load_highscores(FILE *f)
     rewind(f);
     char current_name[20];
     int current_score = 0;
-    Highscore_ptr *all_scores = malloc(sizeof(Highscore_ptr) * 10);
+    Highscore_ptr *all_scores = malloc(sizeof(Highscore_ptr) * NB_SCORES);
 
     int i = 0;
     while (fscanf(f, "%s %d", current_name, &current_score) > 0)
@@ -62,6 +64,36 @@ Highscore_ptr *load_highscores(FILE *f)
         i++;
     }
     return all_scores;
+}
+
+//add the player score in the good place. Return the place of the player, -1 if not a highscore
+int add_player_score(Highscore_ptr *scores, int nb_scores, char *player_name, int player_score)
+{
+    int player_rank = -1;
+    Highscore_ptr candidate_highscore = new_highscore(player_name, player_score);
+    for (int i = 0; i < nb_scores; i++)
+    {
+        //insert here
+        if (candidate_highscore->score >= scores[i]->score)
+        {
+            Highscore_ptr temp_highscore;
+            temp_highscore = scores[i];
+            scores[i] = candidate_highscore;
+            candidate_highscore = temp_highscore;
+            temp_highscore = NULL;
+
+            if (player_rank == -1)
+                player_rank = i + 1;
+        }
+        //insert in last
+        if (i == nb_scores - 1 && i + 1 < NB_SCORES)
+        {
+            scores[i + 1] = candidate_highscore;
+            if (player_rank == -1)
+                player_rank = i + 2;
+        }
+    }
+    return player_rank;
 }
 
 /* //open highscore file

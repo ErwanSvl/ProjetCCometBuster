@@ -7,3 +7,4 @@ src/sprite.o
 .vscode
 src/scores.txt
 src/score.o
+src/core

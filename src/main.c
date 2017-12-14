@@ -543,14 +543,23 @@ int main(int argc, char *argv[])
     // int current_score = 0;
     // fscanf(f, "%s:%d", current_name, &current_score);
     // printf("%s est premier avec un score de %d", current_name, current_score);
+    char *name = get_player_name();
     int nb_lines = get_nb_scores(f);
     printf("Le fichier de score contient %d lignes \n", nb_lines);
-    Highscore_ptr * highscores = load_highscores(f);
-    for(int i=0; i<nb_lines; i++) {
-      printf("Joueur %d : %s de score %d\n", i, highscores[i]->name, highscores[i]->score);
+    Highscore_ptr *highscores = load_highscores(f);
+    // GDB();
+    int place = add_player_score(highscores, nb_lines, name, score);
+    if (nb_lines < NB_SCORES) {
+      nb_lines++;
+      printf("Bravo, tu es le %d\n", place);
+    } else {
+      printf("Dommage tu n'es pas dans les 10 premiers\n");
+    }
+    for (int i = 0; i < nb_lines; i++)
+    {
+      printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);
     }
   }
 
-  // char *name = get_player_name();
   return 0;
 } //main
