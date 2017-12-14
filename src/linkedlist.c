@@ -19,9 +19,12 @@ list_ptr list_add(sprite_t sprite, list_ptr list)
 	new = malloc(sizeof(s_list_node_t));
 	new->data = sprite;
 	new->next = NULL;
-	if (list == NULL) {
+	if (list == NULL)
+	{
 		return new;
-	} else {
+	}
+	else
+	{
 		new->next = list;
 		return new;
 	}
@@ -31,9 +34,11 @@ list_ptr list_add(sprite_t sprite, list_ptr list)
  * */
 int list_length(list_ptr l)
 {
-	if(l == NULL) return 0;
+	if (l == NULL)
+		return 0;
 	int total = 1;
-	while(l->next != NULL) {
+	while (l->next != NULL)
+	{
 		total++;
 	}
 	return total;
@@ -41,10 +46,11 @@ int list_length(list_ptr l)
 
 /* Reverse the order of a list
  * */
-void list_reverse(list_ptr * l)
+void list_reverse(list_ptr *l)
 {
 	list_ptr inv = *l, tete;
-	if (inv && inv->next) {
+	if (inv && inv->next)
+	{
 		tete = inv->next;
 		list_reverse(&(inv->next));
 		tete->next = inv;
@@ -79,7 +85,7 @@ list_ptr list_clone(list_ptr list)
  * */
 bool list_is_empty(list_ptr l)
 {
-	return l==NULL;
+	return l == NULL;
 }
 
 /* Search the first cel of the list & 
@@ -87,7 +93,8 @@ bool list_is_empty(list_ptr l)
  * */
 sprite_t list_head_sprite(list_ptr l)
 {
-	if (l == NULL) return NULL;
+	if (l == NULL)
+		return NULL;
 	return l->data;
 }
 
@@ -95,7 +102,8 @@ sprite_t list_head_sprite(list_ptr l)
  * */
 list_ptr list_next(list_ptr l)
 {
-	if (l == NULL) return NULL;
+	if (l == NULL)
+		return NULL;
 	return l->next;
 	return NULL;
 }
@@ -104,20 +112,23 @@ list_ptr list_next(list_ptr l)
  *  Remove the cel from the list
  *  Return the associated sprite
  * */
-sprite_t list_pop_sprite(list_ptr * l)
+sprite_t list_pop_sprite(list_ptr *l)
 {
 	list_ptr current = *l;
 	sprite_t temp;
-	if(current == NULL) {
+	if (current == NULL)
+	{
 		return NULL;
 	}
-	if(current->next == NULL) {
+	if (current->next == NULL)
+	{
 		temp = current->data;
 		free(*l);
 		*l = NULL;
 		return temp;
 	}
-	while(current->next->next != NULL) {
+	while (current->next->next != NULL)
+	{
 		current = current->next;
 	}
 	temp = current->next->data;
@@ -131,13 +142,17 @@ sprite_t list_pop_sprite(list_ptr * l)
 void list_remove(list_ptr elt, list_ptr *l)
 {
 	list_ptr current = *l;
-	
-	if(elt == current) {
+
+	if (elt == current)
+	{
 		*l = current->next;
 		sprite_free(elt->data);
 		free(elt);
-	} else {
-		while (current->next != elt) {
+	}
+	else
+	{
+		while (current->next != elt)
+		{
 			current = current->next;
 		}
 		current->next = current->next->next;
@@ -152,7 +167,8 @@ void list_remove(list_ptr elt, list_ptr *l)
 void list_free(list_ptr l)
 {
 	list_ptr follower = l;
-	while(l != NULL) {
+	while (l != NULL)
+	{
 		sprite_free(l->data);
 		l = l->next;
 		free(follower);

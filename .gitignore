@@ -1,0 +1,9 @@
+src/linkedlist.o
+src/level.o
+src/collider.o
+src/cometbuster
+src/main.o
+src/sprite.o
+.vscode
+src/scores.txt
+src/score.o
