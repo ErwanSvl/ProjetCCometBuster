@@ -535,30 +535,31 @@ int main(int argc, char *argv[])
   SDL_Quit();
 
   FILE *f;
-  if ((f = fopen("scores.txt", "r")) == NULL)
+  if ((f = fopen("scores.txt", "a+")) == NULL)
     printf("High score file unreachable, sorry.\n");
   else
   {
-    // char current_name[20];
-    // int current_score = 0;
-    // fscanf(f, "%s:%d", current_name, &current_score);
-    // printf("%s est premier avec un score de %d", current_name, current_score);
     char *name = get_player_name();
     int nb_lines = get_nb_scores(f);
     printf("Le fichier de score contient %d lignes \n", nb_lines);
     Highscore_ptr *highscores = load_highscores(f);
-    // GDB();
+    fclose(f);
     int place = add_player_score(highscores, nb_lines, name, score);
-    if (nb_lines < NB_SCORES) {
+    if (nb_lines < NB_SCORES)
       nb_lines++;
+    if (place != -1)
       printf("Bravo, tu es le %d\n", place);
-    } else {
+    else
+    {
       printf("Dommage tu n'es pas dans les 10 premiers\n");
     }
     for (int i = 0; i < nb_lines; i++)
     {
       printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);
     }
+    f = fopen("scores.txt", "w");
+    save_highscores(f, highscores, nb_lines);
+    fclose(f);
   }
 
   return 0;

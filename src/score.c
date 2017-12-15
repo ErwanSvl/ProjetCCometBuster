@@ -11,7 +11,17 @@ char *get_player_name(void)
     name = malloc(NAME_LENGTH * 6);
     printf("Enter your name (5 characters max): ");
     fgets(name, NAME_LENGTH + 1, stdin);
-    name[strlen(name)] = '\0';
+    // name[strlen(name)] = '\0';
+    for (int i = strlen(name) - 1; i >= 0; i--)
+    {
+        if (name[i] == '\n')
+        {
+            name[i] = '\0';
+            if (i == 0)
+                name = "GUEST";
+        }
+        break;
+    }
     return name;
 }
 
@@ -71,6 +81,13 @@ int add_player_score(Highscore_ptr *scores, int nb_scores, char *player_name, in
 {
     int player_rank = -1;
     Highscore_ptr candidate_highscore = new_highscore(player_name, player_score);
+    //file empty
+    if (nb_scores == 0)
+    {
+        scores[0] = candidate_highscore;
+        //bypassing solution, get_nb_score return 1 if the file is empty instead of 0
+        return 0;
+    }
     for (int i = 0; i < nb_scores; i++)
     {
         //insert here
@@ -96,74 +113,12 @@ int add_player_score(Highscore_ptr *scores, int nb_scores, char *player_name, in
     return player_rank;
 }
 
-/* //open highscore file
-FILE *f;
-if ((f = fopen("scores.txt", "r+")) == NULL)
-    printf("High score file unreachable, sorry.\n");
-else
+//save all the highscores array in the file
+void save_highscores(FILE *f, Highscore_ptr *scores, int nb_scores)
 {
-    //get the name for highscore
-    char name[20] = "";
-    printf("Enter your name : ");
-    fgets(name, sizeof(name), stdin);
-
-    char score_line[15];
-    name[strlen(name) - 1] = '\0';
-    sprintf(score_line, "%s:%d", name, score);
-
-    //load the score file
-    char scores[10][30];
-    int nb_scores = 0;
-    for (int i = 0; i < 10; i++)
-    {
-        if (fgets(scores[i], sizeof(scores[0]), f))
-        {
-            scores[i][strlen(scores[i]) - 1] = '\0';
-            nb_scores++;
-        }
-        else
-        {
-            scores[i][0] = '\0';
-        }
-    }
-    //insert score in the table if in the 10th better score
-    char temp[30];
-    char *token = "";
-    int current_score = 0;
-    int temp_score = score;
-    char temp_line[15];
-
-    if (nb_scores < 10)
-    {
-        nb_scores++;
-    }
+    rewind(f);
     for (int i = 0; i < nb_scores; i++)
     {
-        if (i == nb_scores - 1)
-        {
-            strcpy(scores[i + 1], score_line);
-            break;
-        }
-        strcpy(temp, scores[i]);
-        token = strtok(temp, ":");
-        current_score = atoi(strtok(NULL, ":"));
-        if (temp_score > current_score)
-        {
-            if (i < 9)
-            {
-                strcpy(temp_line, scores[i]);
-                strcpy(scores[i], score_line);
-                strcpy(score_line, temp_line);
-                temp_score = current_score;
-            }
-            strcpy(scores[i], score_line);
-        }
+        fprintf(f, "%s %d\n", scores[i]->name, scores[i]->score);
     }
-
-    for (int i = 0; i < 4; i++)
-    {
-        printf("Ligne %d : %s\n", i, scores[i]);
-    }
-
-    //free the buffers
-    fclose(f); */
+}
