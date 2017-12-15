@@ -14,7 +14,7 @@
 #define BULLET_LIFETIME 25
 #define BULLET_SPEED 10
 #define DEFAULT_PTSIZE 24
-#define NUMBER_OF_LIFES 0
+#define NUMBER_OF_LIFES 5
 
 #include "level.h"
 
@@ -33,7 +33,7 @@ list_ptr l_score_el = NULL;
 
 bool shoot_again;
 int score;
-int level = 21; //LEVEL_MIN;
+int level = 1; //LEVEL_MIN;
 
 /* Declaration of few prototypes because there is no .h file with them */
 int init_sdl(void);
@@ -535,13 +535,12 @@ int main(int argc, char *argv[])
   SDL_Quit();
 
   FILE *f;
-  if ((f = fopen("scores.txt", "a+")) == NULL)
+  if ((f = fopen("scores.txt", "r")) == NULL)
     printf("High score file unreachable, sorry.\n");
   else
   {
     char *name = get_player_name();
     int nb_lines = get_nb_scores(f);
-    printf("Le fichier de score contient %d lignes \n", nb_lines);
     Highscore_ptr *highscores = load_highscores(f);
     fclose(f);
     int place = add_player_score(highscores, nb_lines, name, score);
@@ -550,9 +549,7 @@ int main(int argc, char *argv[])
     if (place != -1)
       printf("Bravo, tu es le %d\n", place);
     else
-    {
       printf("Dommage tu n'es pas dans les 10 premiers\n");
-    }
     for (int i = 0; i < nb_lines; i++)
     {
       printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);

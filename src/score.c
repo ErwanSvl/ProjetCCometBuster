@@ -11,16 +11,31 @@ char *get_player_name(void)
     name = malloc(NAME_LENGTH * 6);
     printf("Enter your name (5 characters max): ");
     fgets(name, NAME_LENGTH + 1, stdin);
-    // name[strlen(name)] = '\0';
+    int empty = 1;
     for (int i = strlen(name) - 1; i >= 0; i--)
     {
-        if (name[i] == '\n')
+        //if no name or blank name
+        if (i == 0 && empty)
+            name = "GUEST";
+
+        //test if blank character
+        if ((name[i] != ' ') && name[i] != '\n')
+        {
+            empty = 0;
+        }
+
+        //if blank in the end or end of line
+        if ((name[i] == ' ' && empty == 1) || (name[i] == '\n'))
         {
             name[i] = '\0';
-            if (i == 0)
-                name = "GUEST";
         }
-        break;
+
+
+        //if blank in the name
+        if (name[i] == ' ')
+        {
+            name[i] = '_';
+        }
     }
     return name;
 }
