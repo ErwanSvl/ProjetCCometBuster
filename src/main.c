@@ -360,6 +360,20 @@ int main(int argc, char *argv[])
     return (ret);
   }
 
+  //input graphic or in terminal for highscores
+  char *score_display = "terminal";
+
+  if (argc > 1)
+  {
+    for (int i = 0; i < argc; i++)
+    {
+      if (strcmp(argv[i], "graphic") == 0)
+      {
+        score_display = "graphic";
+      }
+    }
+  }
+
   // default colorkey
   colorkey = SDL_MapRGB(screen->format, 255, 0, 255);
 
@@ -522,7 +536,6 @@ int main(int argc, char *argv[])
 
   } //loop !gameover
 
-  printf("Bye bye.\n");
   /* free the space_ship sprite */
   sprite_free(sprite_ship);
   /* free the background surface */
@@ -534,30 +547,37 @@ int main(int argc, char *argv[])
   /* cleanup SDL */
   SDL_Quit();
 
-  FILE *f;
-  if ((f = fopen("scores.txt", "r")) == NULL)
-    printf("High score file unreachable, sorry.\n");
-  else
+  if (strcmp(score_display, "terminal") == 0)
   {
-    char *name = get_player_name();
-    int nb_lines = get_nb_scores(f);
-    Highscore_ptr *highscores = load_highscores(f);
-    fclose(f);
-    int place = add_player_score(highscores, nb_lines, name, score);
-    if (nb_lines < NB_SCORES)
-      nb_lines++;
-    if (place != -1)
-      printf("Bravo, tu es le %d\n", place);
+    FILE *f;
+    if ((f = fopen("scores.txt", "r")) == NULL)
+      printf("High score file unreachable, sorry.\n");
     else
-      printf("Dommage tu n'es pas dans les 10 premiers\n");
-    for (int i = 0; i < nb_lines; i++)
     {
-      printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);
+      char *name = get_player_name_terminal();
+      int nb_lines = get_nb_scores(f);
+      Highscore_ptr *highscores = load_highscores(f);
+      fclose(f);
+      int place = add_player_score(highscores, nb_lines, name, score);
+      if (nb_lines < NB_SCORES)
+        nb_lines++;
+      if (place != -1)
+        printf("Bravo, tu es le %d\n", place);
+      else
+        printf("Dommage tu n'es pas dans les 10 premiers\n");
+      for (int i = 0; i < nb_lines; i++)
+      {
+        printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);
+      }
+      f = fopen("scores.txt", "w");
+      save_highscores(f, highscores, nb_lines);
+      fclose(f);
     }
-    f = fopen("scores.txt", "w");
-    save_highscores(f, highscores, nb_lines);
-    fclose(f);
   }
-
+  if (strcmp(score_display, "graphic") == 0)
+  {
+    printf("Sorry graphic implementation of highscores is not available yet.\n");
+  }
+  printf("Bye bye.\n");
   return 0;
 } //main

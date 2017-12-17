@@ -10,7 +10,7 @@ typedef struct highscore
   int score;
 } Highscore, *Highscore_ptr;
 
-char *get_player_name(void);
+char *get_player_name_terminal(void);
 Highscore_ptr new_highscore(char *name, int score);
 void delete_highscore(Highscore_ptr highscore);
 Highscore_ptr *load_highscores(FILE *f);

@@ -5,7 +5,7 @@
 #include "score.h"
 
 //get the name of the player
-char *get_player_name(void)
+char *get_player_name_terminal(void)
 {
     char *name;
     name = malloc(NAME_LENGTH * 6);
@@ -15,7 +15,7 @@ char *get_player_name(void)
     for (int i = strlen(name) - 1; i >= 0; i--)
     {
         //if no name or blank name
-        if (i == 0 && empty)
+        if (i == 0 && empty && (name[i] == ' ' || name[i] == '\n'))
             name = "GUEST";
 
         //test if blank character
