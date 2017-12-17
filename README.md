@@ -27,7 +27,7 @@
 
 ## Bugs
 
-- Segmentation fault lorsque l'on perds notre dernière vie sur les PC de l'école.
+- [x] ~~Segmentation fault lorsque l'on perds notre dernière vie sur les PC de l'école.~~ (Résolu).
 - Si le fichier score.txt n'existe pas, on retourne un message d'erreur et on ne cherche pas à le créer (le cas fichier vide est géré).
 - Enregistrement du meilleur score en mode console même si quitté avec 'q'.
 

@@ -9,7 +9,7 @@ char *get_player_name_terminal(void)
 {
     char *name;
     name = malloc(NAME_LENGTH * 6);
-    printf("Enter your name (5 characters max): ");
+    printf("\nEnter your name (5 characters max): ");
     fgets(name, NAME_LENGTH + 1, stdin);
     int empty = 1;
     for (int i = strlen(name) - 1; i >= 0; i--)

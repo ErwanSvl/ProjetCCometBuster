@@ -472,6 +472,7 @@ int main(int argc, char *argv[])
           printf("Score: you reached level %d with %d points\n", level, score);
           fflush(stdout);
           gameover = true;
+          break;
         }
       }
       l_ptr = list_next(l_ptr);
@@ -561,13 +562,16 @@ int main(int argc, char *argv[])
       int place = add_player_score(highscores, nb_lines, name, score);
       if (nb_lines < NB_SCORES)
         nb_lines++;
+
       if (place != -1)
-        printf("Bravo, tu es le %d\n", place);
+        printf("\nCongratulation %s, you have the score number %d\n", name, place);
       else
-        printf("Dommage tu n'es pas dans les 10 premiers\n");
+        printf("Sorry you are not in the 10 best scores :( \n");
+
+      printf("========= Highscores list =========\n");
       for (int i = 0; i < nb_lines; i++)
       {
-        printf("Joueur %d : %s de score %d\n", i + 1, highscores[i]->name, highscores[i]->score);
+        printf("%d | %s : %d\n", i + 1, highscores[i]->name, highscores[i]->score);
       }
       f = fopen("scores.txt", "w");
       save_highscores(f, highscores, nb_lines);
@@ -578,6 +582,6 @@ int main(int argc, char *argv[])
   {
     printf("Sorry graphic implementation of highscores is not available yet.\n");
   }
-  printf("Bye bye.\n");
+  printf("\nBye bye.\n");
   return 0;
 } //main

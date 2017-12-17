@@ -85,7 +85,7 @@ list_ptr list_clone(list_ptr list)
  * */
 bool list_is_empty(list_ptr l)
 {
-	return l == NULL;
+	return (l == NULL || l->data == NULL);
 }
 
 /* Search the first cel of the list & 
@@ -105,7 +105,6 @@ list_ptr list_next(list_ptr l)
 	if (l == NULL)
 		return NULL;
 	return l->next;
-	return NULL;
 }
 
 /* Search the last cel of a list 
